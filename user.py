@@ -9,7 +9,6 @@
 #  "userStatus": 0
 #}
 
-
 request = {}
 request["id"] = 0
 request["username"] = "string"
