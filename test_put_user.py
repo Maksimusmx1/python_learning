@@ -1,9 +1,10 @@
 import pytest
 import requests
 import json
+import resources.urls as urls
+import Steps.support_steps as support_steps
 
 def test_put_user():
-    url = "https://petstore.swagger.io/v2/user"
     request = {}
     request['id'] = 1
     request['username'] = "Catty"
@@ -14,7 +15,7 @@ def test_put_user():
     request['phone'] = "999-99-99"
     request['userstatus'] = "0"
     print("request =", request)
-    url_put = url + "/" + str(request['username'])
+    url_put = urls.url_pet_user + "/" + str(request['username'])
     print("url_put =",url_put)
     responce_post = requests.put(url_put, json=request)
     print("result = ", responce_post.json())
