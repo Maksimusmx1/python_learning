@@ -1,8 +1,5 @@
-import pytest
 import requests
-import json
 import resources.urls as urls
-import Steps.support_steps as support_steps
 
 def test_put_user():
     request = {}
