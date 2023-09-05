@@ -3,15 +3,24 @@ import requests
 import json
 import resources.urls as urls
 import Steps.support_steps as support_steps
+import Steps.request_steps as request_steps
+import Steps.assert_steps as assert_steps
 
+# Тест проверки существования животного с заданным id
 def test_get_pet():
-    responce_get = requests.get(urls.url_pet_get_id("1"))
+    # Отправляем запрос на проверку животного с id=1
+    responce_get = request_steps.request_get(urls.url_pet_get_id("1"))
+    # Выводим ответ
     print("responce =", responce_get.json())
-    assert responce_get.json()['id'] == 1
-    assert responce_get.json()['status'] == "sold"
+    # Анализируем ответ
+    assert assert_steps.assert_equals_responce_value(responce_get, "id", "1")
+    assert assert_steps.assert_equals_responce_value(responce_get, "status", "sold")
 
+# Тест проверки, что животное с шв =12345 не существовует
 def test_get_pet_id_negative():
-    url = "https://petstore.swagger.io/v2/pet/12345"
-    responce_get = requests.get(urls.url_pet_get_id("1234567"))
+    # Отправляем запрос на проверку животного с id=12345
+    responce_get = request_steps.request_get(urls.url_pet_get_id("12345"))
+    # Выводим ответ
     print("responce =", responce_get.json())
-    assert responce_get.json()['message'] == "Pet not found"
+    # Анализируем ответ
+    assert assert_steps.assert_equals_responce_value(responce_get, "message", "Pet not found")

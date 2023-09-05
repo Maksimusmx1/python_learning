@@ -1,5 +1,3 @@
-import requests
-
 import Steps.request_steps as request_steps
 import resources.urls as urls
 import Steps.generate_json_steps as generate_json_steps
@@ -17,7 +15,6 @@ import pytest
                          )
 def test_post_pet(type):
     # Создаем JSON
-    #request = generate_json_steps.create_json_pet_all_param()
     request = type
     # Отправляем запрос
     responce_post = request_steps.request_post(urls.url_pet_post, request)
