@@ -8,3 +8,4 @@ def test_get_user():
     print("responce =", responce_get.json())
     assert responce_get.json()['id'] == 1
     assert responce_get.json()['userStatus'] == 0
+

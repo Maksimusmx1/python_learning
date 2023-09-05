@@ -1,27 +1,32 @@
 import requests
+
+import Steps.request_steps as request_steps
 import resources.urls as urls
-import Steps.support_steps as support_steps
+import Steps.generate_json_steps as generate_json_steps
+import Steps.assert_steps as assert_steps
+import pytest
 
-def test_post_pet():
-    request = {}
-    request['id'] = 1
-    request['category'] = {}
-    request['category']['id'] = 2
-    request['category']['name'] = "cats"
-    request['name'] = support_steps.generate_random_letter_strings(7)
-    request['photoUrls'] = ["photoSberCat"]
-    request['tags'] = [{}]
-    request['tags'][0]['id'] = 3
-    request['tags'][0]['name'] = "sberTag"
-    request['status'] = "sold"
-    print(request)
-    responce_post = requests.post(urls.url_pet_post, json=request)
-    print("result = ", responce_post.json())
-    assert responce_post.json()['id'] is not None
-
+# Тест для создания нового питомца
+@pytest.mark.smoke_API
+@pytest.mark.parametrize('type',
+                         [
+                             generate_json_steps.create_json_pet_required_param(),
+                             generate_json_steps.create_json_pet_all_param()
+                         ],
+                         ids=["required_param", "all_param"]
+                         )
+def test_post_pet(type):
+    # Создаем JSON
+    #request = generate_json_steps.create_json_pet_all_param()
+    request = type
+    # Отправляем запрос
+    responce_post = request_steps.request_post(urls.url_pet_post, request)
+    # Анализируем ответ
+    assert_steps.assert_note_none_id(responce_post)
+    # Проверяем через GET что объект действительно создан
+    # Формируем URL
     url_get = urls.url_pet_get_id(str(responce_post.json()['id']))
-    print("url_get ", url_get)
-
-    responce_get = requests.get(url_get)
-    print("result_get = ", responce_get.json())
-    assert responce_get.json()['id'] == responce_post.json()['id']
+    # Отправляем запрос
+    responce_get = request_steps.request_get(url_get)
+    # Сравниваем ID
+    assert_steps.assert_equals_responce_ids(responce_get, responce_post)
