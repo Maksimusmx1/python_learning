@@ -13,8 +13,8 @@ def test_get_pet():
     # Выводим ответ
     print("responce =", responce_get.json())
     # Анализируем ответ
-    assert assert_steps.assert_equals_responce_value(responce_get, "id", "1")
-    assert assert_steps.assert_equals_responce_value(responce_get, "status", "sold")
+    assert_steps.assert_equals_responce_value(responce_get, "id", "1")
+    assert_steps.assert_equals_responce_value(responce_get, "status", "sold")
 
 # Тест проверки, что животное с шв =12345 не существовует
 def test_get_pet_id_negative():
@@ -23,4 +23,4 @@ def test_get_pet_id_negative():
     # Выводим ответ
     print("responce =", responce_get.json())
     # Анализируем ответ
-    assert assert_steps.assert_equals_responce_value(responce_get, "message", "Pet not found")
+    assert_steps.assert_equals_responce_value(responce_get, "message", "Pet not found")

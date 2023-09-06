@@ -15,5 +15,8 @@ def assert_equals_responce_ids(first, second):
 def assert_equals_responce_value(responce,field,value):
     print("field ",field)
     print("value ", value)
+    print("responce ",responce)
+    print("responce json ",responce.json())
     assert responce.json()[field] == value
+    # assertEqual(responce.json()[field], value)
     print("PASSED")
