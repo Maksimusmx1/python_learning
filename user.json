@@ -6,4 +6,4 @@ request["lastName"] = ""
 request["email"] = "string"
 request["password"] = "string"
 request["phone"] = ""
-request["userStatus"] = "0"
+request["userStatus"] = 0

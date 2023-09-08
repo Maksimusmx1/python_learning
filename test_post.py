@@ -3,8 +3,10 @@ import resources.urls as urls
 import Steps.generate_json_steps as generate_json_steps
 import Steps.assert_steps as assert_steps
 import pytest
+import allure
 
 # Тест для создания нового питомца
+@allure.step
 @pytest.mark.smoke_API
 @pytest.mark.parametrize('type',
                          [
