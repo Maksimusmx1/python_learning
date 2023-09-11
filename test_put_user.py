@@ -1,7 +1,10 @@
 import requests
 import resources.urls as urls
+import test_post_user
 
 def test_put_user():
+    # Подготавливаем тестового пользователя
+    test_post_user.test_post_user()
     request = {}
     request['id'] = 1
     request['username'] = "Catty"
