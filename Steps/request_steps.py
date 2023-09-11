@@ -10,7 +10,9 @@ def request_post(url, request):
         response = requests.post(url, json=request, verify=False)
         # переводим тип 'dict' от request в набор байт для прикрепления
         request_encode = json.dumps(request, indent=2).encode('utf-8')
+        # выводим в отчет тело запроса
         allure.attach(request_encode, 'REQUEST', allure.attachment_type.JSON)
+        # выводим в отчет тело ответа
         allure.attach(response.content, 'RESPONSE', allure.attachment_type.JSON)
         return response
 

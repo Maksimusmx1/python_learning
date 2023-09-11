@@ -1,9 +1,9 @@
 request = {}
 request["id"] = 0
 request["username"] = "string"
-request["firstName"] = ""
-request["lastName"] = ""
+request["firstName"] = "string"
+request["lastName"] = "string"
 request["email"] = "string"
 request["password"] = "string"
-request["phone"] = ""
+request["phone"] = "string"
 request["userStatus"] = 0
