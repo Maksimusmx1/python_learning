@@ -1,62 +1,28 @@
-import pytest
-import requests
+import resources.urls as urls
+import Steps.generate_json_steps as genarate_json_steps
+import Steps.assert_steps as assert_steps
+import Steps.request_steps as request_steps
 import json
 
 def test_delete_pet():
-    url = "https://petstore.swagger.io/v2/pet"
-    request = {}
-    request['id'] = 1
-    request['category'] = {}
-    request['category']['id'] = 2
-    request['category']['name'] = "cats"
-    request['name'] = "sberCat"
-    request['photoUrls'] = ["photoSberCat"]
- #   request['tags'] = [{'id':3,'name':"sberTag"}]
-    request['tags'] = [{}]
-    request['tags'][0]['id'] = 3
-    request['tags'][0]['name'] = "sberTag"
-    request['status'] = "avalible"
-    print(request)
-    responce_post = requests.post(url, json=request)
-    print("result = ", responce_post.json())
-
-    url_delete = url + "/" + str(responce_post.json()['id'])
-    print("url_delete", url_delete)
-
-    responce_delete = requests.delete(url_delete)
-    print("result_delete =", responce_delete.json())
-
-    assert responce_delete.json()['code'] == 200
-
-    url_get = url + "/" + str(responce_post.json()['id'])
-    print ("url_get ", url_get )
-
-    responce_get = requests.get(url_get)
-    print("result_get = ", responce_get.json())
-    assert responce_get.json()['message'] == "Pet not found"
+    # Отправляем запрос
+    response_post = request_steps.request_post(urls.url_pet_post, genarate_json_steps.create_json_pet_all_param())
+    # Формируем URL удаления
+    url_delete = urls.url_pet_post + "/" + str(response_post.json()['id'])
+    # Удаляем пользователя
+    response_delete = request_steps.delete_user(url_delete)
+    # Проверяем код ответа
+    assert_steps.assert_equals_response_value(response_delete, 'code', '200')
+    # Делаем запрос с ID удаленного пользователя
+    response_get = request_steps.request_get(url_delete)
+    # Проверяем, что пользователь удален
+    assert_steps.assert_equals_response_value(response_get, 'message', 'Pet not found')
 
 
 def test_delete_pet_id_negative():
-    url = "https://petstore.swagger.io/v2/pet"
-    request = {}
-    request['id'] = 1
-    request['category'] = {}
-    request['category']['id'] = 2
-    request['category']['name'] = "cats"
-    request['name'] = "sberCat"
-    request['photoUrls'] = ["photoSberCat"]
- #   request['tags'] = [{'id':3,'name':"sberTag"}]
-    request['tags'] = [{}]
-    request['tags'][0]['id'] = 3
-    request['tags'][0]['name'] = "sberTag"
-    request['status'] = "avalible"
-    print(request)
-    responce_post = requests.post(url, json=request)
-    print("result = ", responce_post.json())
-
-    url_delete = url + "/" + "12345"
-    print("url_delete", url_delete)
-
-    responce_delete = requests.delete(url_delete)
-    print("result_delete =", responce_delete)
-    assert str(responce_delete).__contains__("404")
+    # Формируем URL c не существующим ID для удаления
+    url_delete = urls.url_pet_post + "/" + '99999'
+    # Удаляем пользователя
+    response_delete = request_steps.delete_user(url_delete)
+    # Проверяем, что такой страницы (пользователя) не существует
+    assert_steps.assert_page_not_found(response_delete)

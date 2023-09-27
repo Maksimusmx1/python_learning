@@ -13,9 +13,9 @@ def test_post_pet_id_uploadImage():
     # Формируем URL запроса для добавления животного
     url_post = urls.url_pet_post
     # Отправляем запрос создание животтного с нужным ID
-    responce_post = request_steps.request_post(url_post, generate_json_steps.create_json_pet_all_param_id(id_num))
+    response_post = request_steps.request_post(url_post, generate_json_steps.create_json_pet_all_param_id(id_num))
     # Анализируем ответ
-    assert_steps.assert_note_none_id(responce_post)
+    assert_steps.assert_note_none_id(response_post)
     # Формируем URL запроса для загрузки картинки
     url_upload = urls.url_pet_post_uploadimage(id_num)
     # Открываем файл на чтение
@@ -24,6 +24,6 @@ def test_post_pet_id_uploadImage():
     # Отправляем запрос на загрузку картинки
     resp = request_steps.request_post_files(url_upload, files)
     # Проверяем, что загрузка выполнилась
-    assert_steps.assert_equals_responce_value(resp, "code", 200)
+    assert_steps.assert_equals_response_value(resp, "code", 200)
     # Закрываем файл на чтение
     fp.close()

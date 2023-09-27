@@ -1,50 +1,27 @@
-import pytest
-import requests
-import json
+import test_post
+import Steps.generate_json_steps as generate_json_steps
+import Steps.request_steps as request_steps
+import resources.urls as urls
+import Steps.assert_steps as assert_steps
 
-def test_post_pet():
-    url = "https://petstore.swagger.io/v2/pet"
-    request = {}
-    request['id'] = 1
-    request['category'] = {}
-    request['category']['id'] = 2
-    request['category']['name'] = "cats"
-    request['name'] = "sberCat"
-    request['photoUrls'] = ["photoSberCat1"]
-    request['tags'] = [{'id':3,'name':"sberTag"}]
-    request['status'] = "avalible"
-    print(request)
-    responce_post = requests.post(url, json=request)
-    print("result = ", responce_post.json())
+def test_put_pet():
+    # Задаем ID животного
+    id = 123
+    # Создадим животное с заданным ID
+    response_post = test_post.test_post_pet(generate_json_steps.create_json_pet_all_param_id(id))
+    # сформируем JSON с нужными полями
+    request = generate_json_steps.create_json_pet_put(id)
+    # Выполним PUT
+    response_put = request_steps.request_put(urls.url_pet_post, request)
+    # Проверяем ответ
+    assert_steps.assert_equals_response_value(response_put, 'photoUrls', '[]')
 
-    request_put = {}
-    request_put['id'] = str(responce_post.json()['id'])
-    request_put['name'] = "sberWowKitten"
-    print(request_put)
-    responce_put = requests.put(url, json=request_put)
-    print("result =", responce_put.json())
-
-    assert responce_put.json()['photoUrls'] == []
-
-    url_get = url + "/" + str(responce_put.json()['id'])
-    print ("url_get ", url_get )
-
-    responce_get = requests.get(url_get)
-    print("result_get = ", responce_get.json())
-    assert responce_get.json()['id'] == responce_put.json()['id']
-
-def test_post_pet_id_negative():
-    url = "https://petstore.swagger.io/v2/pet"
-    request = {}
-    request['id'] = "name"
-    request['category'] = {}
-    request['category']['id'] = 2
-    request['category']['name'] = "cats"
-    request['name'] = "sberCat"
-    request['photoUrls'] = ["photoSberCat1"]
-    request['tags'] = [{'id': 3, 'name': "sberTag"}]
-    request['status'] = "avalible"
-    print(request)
-    responce_put = requests.put(url, json=request)
-    print("result = ", responce_put.json())
-    assert responce_put.json()['message'] == 'something bad happened'
+def test_put_pet_id_negative():
+    # Задаем ID животного
+    id = 'name'
+    # сформируем JSON с нужными полями
+    request = generate_json_steps.create_json_pet_put(id)
+    # Выполним PUT
+    response_put = request_steps.request_put(urls.url_pet_post, request)
+    # Проверяем ответ
+    assert_steps.assert_equals_response_value(response_put, 'message', 'something bad happened')
