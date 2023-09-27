@@ -19,7 +19,7 @@ def test_post_pet_id_uploadImage():
     # Формируем URL запроса для загрузки картинки
     url_upload = urls.url_pet_post_uploadimage(id_num)
     # Открываем файл на чтение
-    fp = open('files/send.txt', 'rb')
+    fp = open('../files/send.txt', 'rb')
     files = {'file': fp}
     # Отправляем запрос на загрузку картинки
     resp = request_steps.request_post_files(url_upload, files)
