@@ -31,7 +31,5 @@ def assert_equals_response_value(response,field,value):
 # Функция проверяет, что страницы не существует
 def assert_page_not_found(response):
     with allure.step("Функия проверяет, что страницы не существует"):
-        print("response ",response)
-        print("response json ",response.json())
         assert str(response).__contains__("404")
         print("PASSED")
